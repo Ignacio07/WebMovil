@@ -47,14 +47,11 @@ import axios from "axios";
 
 const SignUp = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
-    const [email, setEmail] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [password, setPassword] = useState('');
+   
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
      
-    const registerRequest = async (emal: string, firstName: string, lastName: string,password: string) => {
+    const registerRequest = async (email: string, firstName: string, lastName: string,password: string) => {
         setError(false);
 
         try{
@@ -64,6 +61,8 @@ const SignUp = ({navigation}) => {
                 lastName,
                 password,
             });
+
+            navigation.navigate('Login');
 
         }catch (e: any){
             setError(true);
@@ -82,10 +81,7 @@ const SignUp = ({navigation}) => {
                     <SubTitle>Registrar cuenta</SubTitle>
                     <Formik
                         initialValues={{firstName: '', lastName: '',email: '', password: '', confirmPassword: ''}}
-                        onSubmit={(values) => {
-                            console.log(values);
-                            navigation.navigate('Welcome');
-                        }}
+                        onSubmit={(values) => registerRequest(values.email, values.firstName,  values.lastName,values.password)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -113,7 +109,7 @@ const SignUp = ({navigation}) => {
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.firstName}
-                                            onChangeText={(text: string) => setFirstName(text)}
+                                            onChangeText={handleChange('firstName')}
                                             onBlur={handleBlur('firstName')}
                                         />
                                     </View>
@@ -127,7 +123,7 @@ const SignUp = ({navigation}) => {
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.lastName}
-                                            onChangeText={(text: string) => setLastName(text)}
+                                            onChangeText={handleChange('lastName')}
                                             onBlur={handleBlur('lastName')}
                                         />
                                     </View>
@@ -142,7 +138,7 @@ const SignUp = ({navigation}) => {
                                         placeholderTextColor={primary}
                                         value={values.email}
                                         placeholder="mail@site.com"
-                                        onChangeText={(text: string) => setEmail(text)}
+                                        onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
                                         />
@@ -176,7 +172,7 @@ const SignUp = ({navigation}) => {
                                         value={values.password}
                                         placeholder="Password"
                                         secureTextEntry
-                                        onChangeText={(text: string) => setPassword(text)}
+                                        onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
                                         />
                                     </View>
@@ -199,7 +195,7 @@ const SignUp = ({navigation}) => {
                                 
                                     <MsgBox>...</MsgBox>
                                     <StyledButton 
-                                        onPress={() => registerRequest(email, firstName, lastName,password)}>
+                                        onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password)}>
                                         <ButtonText>
                                             SignIn
                                         </ButtonText>
