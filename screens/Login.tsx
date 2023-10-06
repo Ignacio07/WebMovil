@@ -1,6 +1,10 @@
 import React, {useState} from "react";
 import { StatusBar } from "expo-status-bar";
 
+import axios from "axios";
+
+import { ENDPOINT_MS_USER } from 'react-native-dotenv';
+
 import { TextInput, View, Text } from 'react-native';
 
 //formik
@@ -45,8 +49,30 @@ const {brand, primary, secondary, terceary,  darkLight} = Colors;
 
 import KeyboardWrapper from "../components/keyboardWrapper";
 
+
+
 const Login = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+     
+    const loginRequest = async (emal: string, password: string) => {
+        setError(false);
+
+        try{
+            const response = await axios.post('${ENDPOINT_MS_USER}/login',{
+                email,
+                password,
+            });
+
+        }catch (e: any){
+            setError(true);
+            setErrorMessage(e?.response?.data?.message);
+            console.log({error: e?.response?.data?.message});
+        }
+    };
 
     return(
         <KeyboardWrapper>
@@ -87,7 +113,7 @@ const Login = ({navigation}) => {
                                         placeholderTextColor={primary}
                                         value={values.email}
                                         placeholder="mail@site.com"
-                                        onChangeText={handleChange('email')}
+                                        onChangeText={(text: string) => setPassword(text)}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
                                         />
@@ -119,21 +145,30 @@ const Login = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
-                                        placeholder="Passoword"
+                                        placeholder="Password"
                                         secureTextEntry
-                                        onChangeText={handleChange('password')}
+                                        onChangeText={(text: string) => setEmail(text)}
                                         onBlur={handleBlur('password')}
                                         />
                                     </View>
 
 
                                     <MsgBox>...</MsgBox>
-                                    <StyledButton onPress={handleSubmit}>
-                                        <ButtonText>
+                                    <StyledButton onPress={() => handleSubmit}>
+                                        <ButtonText onPress={() => loginRequest(email,password)}>
                                             Login
                                         </ButtonText>
                                     </StyledButton>
                                     <Line />
+<<<<<<< Updated upstream
+=======
+                                    <StyledButton github= {true} onPress={() => handleSubmit}>
+                                        <AntDesign name="github" color={primary} size={30}/> 
+                                        <ButtonText github={true}>
+                                            Sign in with GitHub
+                                        </ButtonText>
+                                    </StyledButton>
+>>>>>>> Stashed changes
                                     <ExtraView>
                                         <ExtraText>
                                             Don't Have an account already?. 
