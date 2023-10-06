@@ -42,10 +42,35 @@ const {primary , secondary} = Colors;
 // Keyboards
 
 import KeyboardWrapper from "../components/keyboardWrapper";
+import axios from "axios";
 
 
 const SignUp = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
+    const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+     
+    const registerRequest = async (emal: string, firstName: string, lastName: string,password: string) => {
+        setError(false);
+
+        try{
+            const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
+                email,
+                firstName,
+                lastName,
+                password,
+            });
+
+        }catch (e: any){
+            setError(true);
+            setErrorMessage(e?.response?.data?.message);
+            console.log({error: e?.response?.data?.message});
+        }
+    };
 
     return(
         <KeyboardWrapper>
@@ -88,7 +113,7 @@ const SignUp = ({navigation}) => {
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.firstName}
-                                            onChangeText={handleChange('firstName')}
+                                            onChangeText={(text: string) => setFirstName(text)}
                                             onBlur={handleBlur('firstName')}
                                         />
                                     </View>
@@ -102,8 +127,8 @@ const SignUp = ({navigation}) => {
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.lastName}
-                                            onChangeText={handleChange('lastName')}
-                                            onBlur={handleBlur('lastName')}a
+                                            onChangeText={(text: string) => setLastName(text)}
+                                            onBlur={handleBlur('lastName')}
                                         />
                                     </View>
 
@@ -117,7 +142,7 @@ const SignUp = ({navigation}) => {
                                         placeholderTextColor={primary}
                                         value={values.email}
                                         placeholder="mail@site.com"
-                                        onChangeText={handleChange('email')}
+                                        onChangeText={(text: string) => setEmail(text)}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
                                         />
@@ -149,9 +174,9 @@ const SignUp = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
-                                        placeholder="Passoword"
+                                        placeholder="Password"
                                         secureTextEntry
-                                        onChangeText={handleChange('password')}
+                                        onChangeText={(text: string) => setPassword(text)}
                                         onBlur={handleBlur('password')}
                                         />
                                     </View>
@@ -174,7 +199,7 @@ const SignUp = ({navigation}) => {
                                 
                                     <MsgBox>...</MsgBox>
                                     <StyledButton 
-                                        onPress={handleSubmit}>
+                                        onPress={() => registerRequest(email, firstName, lastName,password)}>
                                         <ButtonText>
                                             SignIn
                                         </ButtonText>

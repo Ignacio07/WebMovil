@@ -58,11 +58,11 @@ const Login = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
      
-    const loginRequest = async (emal: string, password: string) => {
+    const loginRequest = async (email: string, password: string) => {
         setError(false);
 
         try{
-            const response = await axios.post('${ENDPOINT_MS_USER}/login',{
+            const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
                 email,
                 password,
             });
@@ -113,7 +113,7 @@ const Login = ({navigation}) => {
                                         placeholderTextColor={primary}
                                         value={values.email}
                                         placeholder="mail@site.com"
-                                        onChangeText={(text: string) => setPassword(text)}
+                                        onChangeText={(text: string) => setEmail(text)}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
                                         />
@@ -147,28 +147,25 @@ const Login = ({navigation}) => {
                                         value={values.password}
                                         placeholder="Password"
                                         secureTextEntry
-                                        onChangeText={(text: string) => setEmail(text)}
+                                        onChangeText={(text: string) => setPassword(text)}
                                         onBlur={handleBlur('password')}
                                         />
                                     </View>
 
 
                                     <MsgBox>...</MsgBox>
-                                    <StyledButton onPress={() => handleSubmit}>
-                                        <ButtonText onPress={() => loginRequest(email,password)}>
+                                    <StyledButton onPress={() => loginRequest(email,password)}>
+                                        <ButtonText>
                                             Login
                                         </ButtonText>
                                     </StyledButton>
                                     <Line />
-<<<<<<< Updated upstream
-=======
                                     <StyledButton github= {true} onPress={() => handleSubmit}>
                                         <AntDesign name="github" color={primary} size={30}/> 
                                         <ButtonText github={true}>
                                             Sign in with GitHub
                                         </ButtonText>
                                     </StyledButton>
->>>>>>> Stashed changes
                                     <ExtraView>
                                         <ExtraText>
                                             Don't Have an account already?. 
